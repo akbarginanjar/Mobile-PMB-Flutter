@@ -37,6 +37,30 @@ class RegisterScreen extends StatelessWidget {
 
               // ================= EMAIL FIELD =================
               const Text(
+                "Nama Lengkap",
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(height: 6),
+
+              TextField(
+                controller: controller.namaLengkapController,
+                decoration: InputDecoration(
+                  filled: true,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 14,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 6),
+
+              // ================= EMAIL FIELD =================
+              const Text(
                 "Email",
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
               ),
@@ -136,8 +160,7 @@ class RegisterScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    print("Email: ${controller.emailController.text}");
-                    print("Password: ${controller.passwordController.text}");
+                    controller.nextRegister();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primary,
@@ -146,7 +169,7 @@ class RegisterScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text("Login"),
+                  child: const Text("Buat Akun"),
                 ),
               ),
             ],

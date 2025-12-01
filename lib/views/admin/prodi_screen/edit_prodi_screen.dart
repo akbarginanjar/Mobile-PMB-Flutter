@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pmb_mobile/controllers/prodi_controller.dart';
 
-class TambahProdiScreen extends StatelessWidget {
-  TambahProdiScreen({super.key});
+class EditProdiScreen extends StatelessWidget {
+  final String mpid;
+  EditProdiScreen({super.key, required this.mpid});
 
   final controller = Get.put(ProdiController());
 
@@ -15,7 +16,7 @@ class TambahProdiScreen extends StatelessWidget {
         shadowColor: Colors.black38,
         surfaceTintColor: Colors.white,
         backgroundColor: Colors.white,
-        title: const Text("Tambah Program Studi"),
+        title: const Text("Edit Program Studi"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -132,7 +133,10 @@ class TambahProdiScreen extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: controller.simpanProdi,
+                onPressed: () {
+                  controller.editProdi(mpid);
+                },
+
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(

@@ -37,7 +37,7 @@ class LoginScreen extends StatelessWidget {
 
               // ================= EMAIL FIELD =================
               const Text(
-                "Email / NIM",
+                "Email",
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 6),
@@ -100,8 +100,7 @@ class LoginScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    print("Email: ${controller.emailController.text}");
-                    print("Password: ${controller.passwordController.text}");
+                    controller.nextLogin();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primary,

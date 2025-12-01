@@ -14,7 +14,7 @@ class MainScreenAdmin extends StatefulWidget {
 
 class _MainScreenAdminState extends State<MainScreenAdmin> {
   final List<Widget> _screens = [
-    const DashboardAdminScreen(),
+    DashboardAdminScreen(),
     const ListMahasiswaDiterimaScreen(),
   ];
 

@@ -108,7 +108,7 @@ class LoginAdminScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Get.offAll(MainScreenAdmin());
+                    controller.nextLogin();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primary,

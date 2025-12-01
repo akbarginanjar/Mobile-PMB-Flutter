@@ -39,6 +39,10 @@ dependencies:
   flutter_easyloading: ^3.0.5
   intl: ^0.20.2
   hexcolor: ^3.0.2
+  carousel_slider: ^5.1.1
+  http: ^1.6.0
+  image_picker: ^1.2.1
+  file_picker: ^10.3.7
 
 dev_dependencies:
   flutter_test:

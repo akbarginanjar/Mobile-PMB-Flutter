@@ -30,7 +30,7 @@ class ListMahasiswaDiterimaScreen extends StatelessWidget {
                 child: TextField(
                   onChanged: controller.updateSearch,
                   decoration: InputDecoration(
-                    hintText: "Cari nama mahasiswa...",
+                    hintText: "Cari nama, nim mahasiswa...",
                     prefixIcon: const Icon(Icons.search),
                     contentPadding: const EdgeInsets.symmetric(vertical: 12),
                     border: OutlineInputBorder(
@@ -43,6 +43,10 @@ class ListMahasiswaDiterimaScreen extends StatelessWidget {
               // LIST
               Expanded(
                 child: Obx(() {
+                  if (controller.isLoading.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
                   var list = controller.filteredMahasiswa;
 
                   if (list.isEmpty) {
@@ -76,13 +80,15 @@ class ListMahasiswaDiterimaScreen extends StatelessWidget {
                             Get.to(
                               () => DetailPendaftaranScreen(
                                 data: {
-                                  "nama": "Budi Santoso",
-                                  "nik": "123456789",
-                                  "email": "budi@gmail.com",
-                                  "hp": "0812345678",
-                                  "prodi": "Informatika",
-                                  "tanggal": "22 November 2025",
-                                  "foto": null,
+                                  "mid": "${item['mid']}",
+                                  "nama": "${item['nama_lengkap']}",
+                                  "nim": "${item['nim']}",
+                                  "email": "${item['email']}",
+                                  "hp": "${item['no_telp']}",
+                                  "prodi": "${item['nama_prodi']}",
+                                  "tanggal": "${item['create_time']}",
+                                  "foto": "${item['upload_file']}",
+                                  "status": "${item['status']}",
                                 },
                               ),
                             );
@@ -90,34 +96,52 @@ class ListMahasiswaDiterimaScreen extends StatelessWidget {
                           leading: CircleAvatar(
                             radius: 25,
                             backgroundColor: Colors.grey.shade300,
-                            backgroundImage: item['foto'] != null
-                                ? NetworkImage(item['foto'])
+                            backgroundImage: item['upload_file'] != null
+                                ? NetworkImage(item['upload_file'])
                                 : null,
-                            child: item['foto'] == null
+                            child: item['upload_file'] == null
                                 ? const Icon(Icons.person, color: Colors.white)
                                 : null,
                           ),
                           title: Text(
-                            item['nama'],
+                            item['nama_lengkap'] ?? "-",
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
                           ),
-                          subtitle: Text(item['prodi']),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(item['nim'] ?? "-"),
+                              Text(item['nama_prodi'] ?? "-"),
+                            ],
+                          ),
                           trailing: Container(
                             padding: const EdgeInsets.symmetric(
                               vertical: 6,
                               horizontal: 12,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.green.shade100,
+                              color: item['status'] == 0
+                                  ? Colors.orange.shade100
+                                  : item['status'] == 1
+                                  ? Colors.green.shade100
+                                  : Colors.red.shade100,
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: const Text(
-                              "Diterima",
+                            child: Text(
+                              item['status'] == 0
+                                  ? 'Pending'
+                                  : item['status'] == 1
+                                  ? 'Diterima'
+                                  : 'Ditolak',
                               style: TextStyle(
-                                color: Colors.green,
+                                color: item['status'] == 0
+                                    ? Colors.orange
+                                    : item['status'] == 1
+                                    ? Colors.green[800]
+                                    : Colors.red[800],
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

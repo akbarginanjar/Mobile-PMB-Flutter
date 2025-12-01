@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:pmb_mobile/controllers/pendaftaran_controller.dart';
 
 class DetailPendaftaranScreen extends StatelessWidget {
   final Map<String, dynamic> data;
 
-  const DetailPendaftaranScreen({super.key, required this.data});
+  DetailPendaftaranScreen({super.key, required this.data});
+
+  final controller = Get.put(PendaftaranController());
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +27,30 @@ class DetailPendaftaranScreen extends StatelessWidget {
           children: [
             // FOTO PROFIL
             Center(
-              child: CircleAvatar(
-                radius: 50,
-                backgroundColor: Colors.grey.shade300,
-                backgroundImage: data['foto'] != null
-                    ? NetworkImage(data['foto'])
-                    : null,
-                child: data['foto'] == null
-                    ? const Icon(Icons.person, size: 50, color: Colors.white)
-                    : null,
+              child: SizedBox(
+                height: 70,
+                width: 70,
+                child: CircleAvatar(
+                  radius: 26,
+                  backgroundColor: Colors.blue.shade100,
+                  child: data['foto'] == null
+                      ? Text(
+                          data["nama_lengkap"].substring(0, 1),
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      : ClipOval(
+                          child: Image.network(
+                            '${data['foto']}',
+                            width:
+                                40, // harus sama dengan diameter CircleAvatar
+                            height: 40,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                ),
               ),
             ),
 
@@ -53,51 +72,72 @@ class DetailPendaftaranScreen extends StatelessWidget {
             const Divider(),
 
             // INFORMASI DETAIL
-            _detailItem("NIK", data['nik']),
+            if (data['nim'] != 'null') _detailItem("NIM", data['nim']),
             _detailItem("Email", data['email']),
             _detailItem("No HP", data['hp']),
             _detailItem("Program Studi", data['prodi']),
             _detailItem("Tanggal Daftar", data['tanggal']),
-            _detailItem("Status", "Belum diterima", valueColor: Colors.orange),
+            _detailItem(
+              "Status",
+              data['status'] == '0'
+                  ? "Belum diterima"
+                  : data['status'] == '1'
+                  ? "Diterima"
+                  : "Ditolak",
+              valueColor: data['status'] == '0'
+                  ? Colors.orange
+                  : data['status'] == '1'
+                  ? Colors.green[800]
+                  : Colors.red[800],
+            ),
 
             const SizedBox(height: 30),
 
             // BUTTON AKSI
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // LOGIC TERIMA
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+            if (data['status'] == '0')
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // LOGIC TERIMA
+                        controller.simpanAccMahasiswa(data['mid']);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        "Terima",
+                        style: TextStyle(fontSize: 16),
                       ),
                     ),
-                    child: const Text("Terima", style: TextStyle(fontSize: 16)),
                   ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // LOGIC TOLAK
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // LOGIC TOLAK
+                        controller.simpanNonAccMahasiswa(data['mid']);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        "Tolak",
+                        style: TextStyle(fontSize: 16),
                       ),
                     ),
-                    child: const Text("Tolak", style: TextStyle(fontSize: 16)),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
           ],
         ),
       ),

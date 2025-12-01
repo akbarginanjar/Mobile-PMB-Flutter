@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/utils.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:pmb_mobile/controllers/dashboard_mahasiswa_controller.dart';
 import 'package:pmb_mobile/utils/theme.dart';
 import 'package:pmb_mobile/views/admin/pendaftaran/pendaftaran_baru_screen.dart';
 import 'package:pmb_mobile/views/admin/prodi_screen/screen.dart';
 import 'package:pmb_mobile/views/home_screen/screen.dart';
 
 class DashboardAdminScreen extends StatelessWidget {
-  const DashboardAdminScreen({super.key});
+  DashboardAdminScreen({super.key});
+
+  final controller = Get.put(DashboardMahasiswaController());
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +49,14 @@ class DashboardAdminScreen extends StatelessWidget {
 
                     const Spacer(),
 
+                    IconButton(
+                      onPressed: () {
+                        controller.loadDashboardAdmin({});
+                      },
+                      icon: Icon(Icons.refresh, size: 25),
+                    ),
+                    SizedBox(width: 10),
+
                     // Profile image
                     PopupMenuButton(
                       color: Colors.white,
@@ -53,6 +65,9 @@ class DashboardAdminScreen extends StatelessWidget {
                       ),
                       onSelected: (value) {
                         if (value == "logout") {
+                          GetStorage().remove('pid');
+                          GetStorage().remove('nama_lengkap');
+                          GetStorage().remove('email');
                           Get.offAll(HomeScreen());
                         }
                       },
@@ -89,17 +104,38 @@ class DashboardAdminScreen extends StatelessWidget {
                 const SizedBox(height: 20),
 
                 // ---------------- GRID STATUS BOX ----------------
-                GridView.count(
-                  crossAxisCount: 2,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12,
-                  children: [
-                    _menuBox("Pendaftaran", "35", "", Colors.orange.shade400),
-                    _menuBox("Mahasiswa", "20", "", Colors.blue.shade400),
-                  ],
-                ),
+                Obx(() {
+                  if (controller.isLoadingDashboard.value) {
+                    return Center(
+                      child: CircularProgressIndicator(color: primary),
+                    );
+                  }
+
+                  if (controller.errorMessageDashboard.isNotEmpty) {
+                    return Text(controller.errorMessageDashboard.value);
+                  }
+                  return GridView.count(
+                    crossAxisCount: 2,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    mainAxisSpacing: 12,
+                    crossAxisSpacing: 12,
+                    children: [
+                      _menuBox(
+                        "Pendaftaran",
+                        "${controller.listDashboard['pending'] ?? '0'}",
+                        "",
+                        Colors.orange.shade400,
+                      ),
+                      _menuBox(
+                        "Mahasiswa",
+                        "${controller.listDashboard['diterima'] ?? '0'}",
+                        "",
+                        Colors.blue.shade400,
+                      ),
+                    ],
+                  );
+                }),
 
                 const SizedBox(height: 30),
 

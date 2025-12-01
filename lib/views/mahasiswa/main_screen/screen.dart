@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pmb_mobile/controllers/main_controller.dart';
+import 'package:pmb_mobile/utils/theme.dart';
+import 'package:pmb_mobile/views/mahasiswa/dashboard_mahasiswa_screen/screen.dart';
 import 'package:pmb_mobile/views/home_screen/screen.dart';
+import 'package:pmb_mobile/views/mahasiswa/pendaftaran_screen/screen.dart';
 
 class MainScreenMahasiswa extends StatefulWidget {
   const MainScreenMahasiswa({super.key});
 
   @override
-  State<MainScreenMahasiswa> createState() => _MainScreenMahasiswaState();
+  State<MainScreenMahasiswa> createState() => _MainScreeMahasiswaState();
 }
 
-class _MainScreenMahasiswaState extends State<MainScreenMahasiswa> {
-  final List<Widget> _screens = [const HomeScreen(), const HomeScreen()];
+class _MainScreeMahasiswaState extends State<MainScreenMahasiswa> {
+  final List<Widget> _screens = [
+    DashboardMahasiswaScreen(),
+    FormPendaftaranScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -25,19 +31,38 @@ class _MainScreenMahasiswaState extends State<MainScreenMahasiswa> {
             iconSize: 25,
             type: BottomNavigationBarType.fixed,
             backgroundColor: Colors.white,
-            onTap: (v) {
-              value.changeIndex(v);
-            },
+
             currentIndex: value.index,
-            enableFeedback: true,
-            selectedItemColor: Theme.of(context).colorScheme.primary,
+            onTap: (v) => value.changeIndex(v),
+
+            // Warna item aktif & tidak aktif
+            selectedItemColor: primary,
+            unselectedItemColor: Colors.grey,
+
+            // Icon aktif & tidak aktif
+            selectedIconTheme: IconThemeData(color: primary, size: 28),
+            unselectedIconTheme: const IconThemeData(
+              color: Colors.grey,
+              size: 25,
+            ),
+
+            // Teks aktif & tidak aktif
+            selectedLabelStyle: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.w600,
+            ),
+            unselectedLabelStyle: const TextStyle(
+              color: Colors.grey,
+              fontWeight: FontWeight.w400,
+            ),
+
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.home_outlined),
                 label: 'Dashboard',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.note),
+                icon: Icon(Icons.file_open),
                 label: 'Pendaftaran',
               ),
             ],

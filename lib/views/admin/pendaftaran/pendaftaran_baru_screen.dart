@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pmb_mobile/controllers/pendaftaran_controller.dart';
+import 'package:pmb_mobile/utils/theme.dart';
 import 'package:pmb_mobile/views/admin/pendaftaran/detail_mahasiswa_screen.dart';
 
 class PendaftaranBaruScreen extends StatelessWidget {
@@ -18,10 +19,19 @@ class PendaftaranBaruScreen extends StatelessWidget {
         surfaceTintColor: Colors.white,
         backgroundColor: Colors.white,
         title: const Text("Pendaftar Baru"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              controller.loadPendaftaranBaru({});
+            },
+            icon: Icon(Icons.refresh),
+          ),
+          SizedBox(width: 10),
+        ],
       ),
 
       body: Obx(() {
-        final data = controller.pendaftarBaru;
+        final data = controller.semuaPendaftar;
 
         if (data.isEmpty) {
           return const Center(
@@ -37,7 +47,13 @@ class PendaftaranBaruScreen extends StatelessWidget {
           itemCount: data.length,
           itemBuilder: (context, index) {
             final mhs = data[index];
+            if (controller.isLoading.value) {
+              return Center(child: CircularProgressIndicator(color: primary));
+            }
 
+            if (controller.errorMessage.isNotEmpty) {
+              return Text(controller.errorMessage.value);
+            }
             return Card(
               elevation: 0,
               color: Colors.white,
@@ -52,16 +68,22 @@ class PendaftaranBaruScreen extends StatelessWidget {
                   Get.to(
                     () => DetailPendaftaranScreen(
                       data: {
-                        "nama": "Budi Santoso",
-                        "nik": "123456789",
-                        "email": "budi@gmail.com",
-                        "hp": "0812345678",
-                        "prodi": "Informatika",
-                        "tanggal": "22 November 2025",
-                        "foto": null,
+                        "mid": "${mhs['mid']}",
+                        "nama": "${mhs['nama_lengkap']}",
+                        "nim": "${mhs['nim']}",
+                        "email": "${mhs['email']}",
+                        "hp": "${mhs['no_telp']}",
+                        "prodi": "${mhs['nama_prodi']}",
+                        "tanggal": "${mhs['create_time']}",
+                        "foto": "${mhs['upload_file']}",
+                        "status": "${mhs['status']}",
                       },
                     ),
-                  );
+                  )!.then((result) {
+                    if (result == true) {
+                      controller.loadPendaftaranBaru({});
+                    }
+                  });
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(15),
@@ -71,13 +93,23 @@ class PendaftaranBaruScreen extends StatelessWidget {
                       CircleAvatar(
                         radius: 26,
                         backgroundColor: Colors.blue.shade100,
-                        child: Text(
-                          mhs["nama"].substring(0, 1),
-                          style: const TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        child: mhs['upload_file'] == null
+                            ? Text(
+                                mhs["nama_lengkap"].substring(0, 1),
+                                style: const TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            : ClipOval(
+                                child: Image.network(
+                                  '${mhs['upload_file']}',
+                                  width:
+                                      52, // harus sama dengan diameter CircleAvatar
+                                  height: 52,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                       ),
 
                       const SizedBox(width: 16),
@@ -88,7 +120,7 @@ class PendaftaranBaruScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              mhs["nama"],
+                              mhs["nama_lengkap"],
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -98,7 +130,7 @@ class PendaftaranBaruScreen extends StatelessWidget {
                             const SizedBox(height: 4),
 
                             Text(
-                              "Nomor Pendaftaran: ${mhs["no_pendaftaran"]}",
+                              "Tgl Pendaftaran: ${mhs["create_time"]}",
                               style: TextStyle(
                                 fontSize: 13,
                                 color: Colors.grey.shade600,
@@ -108,7 +140,7 @@ class PendaftaranBaruScreen extends StatelessWidget {
                             const SizedBox(height: 2),
 
                             Text(
-                              "Prodi: ${mhs["prodi"]}",
+                              "Prodi: ${mhs["nama_prodi"]}",
                               style: TextStyle(
                                 fontSize: 13,
                                 color: Colors.grey.shade700,
@@ -125,13 +157,25 @@ class PendaftaranBaruScreen extends StatelessWidget {
                                 vertical: 6,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.orange.withOpacity(0.15),
+                                color: mhs['status'] == 0
+                                    ? Colors.orange.withOpacity(0.15)
+                                    : mhs['status'] == 1
+                                    ? Colors.green.withOpacity(0.15)
+                                    : Colors.red.withOpacity(0.15),
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              child: const Text(
-                                "Belum Diterima",
+                              child: Text(
+                                mhs['status'] == 0
+                                    ? "Belum Diterima"
+                                    : mhs['status'] == 1
+                                    ? "Diterima"
+                                    : "Ditolak",
                                 style: TextStyle(
-                                  color: Colors.orange,
+                                  color: mhs['status'] == 0
+                                      ? Colors.orange
+                                      : mhs['status'] == 1
+                                      ? Colors.green
+                                      : Colors.red,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 12,
                                 ),
@@ -143,7 +187,7 @@ class PendaftaranBaruScreen extends StatelessWidget {
 
                       // Tombol Detail
                       IconButton(
-                        onPressed: () => controller.goDetail(index),
+                        onPressed: () {},
                         icon: Icon(
                           Icons.arrow_forward_ios,
                           size: 20,
