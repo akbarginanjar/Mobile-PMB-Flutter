@@ -28,8 +28,8 @@ class DetailPendaftaranScreen extends StatelessWidget {
             // FOTO PROFIL
             Center(
               child: SizedBox(
-                height: 70,
-                width: 70,
+                height: 180,
+                width: 180,
                 child: CircleAvatar(
                   radius: 26,
                   backgroundColor: Colors.blue.shade100,
@@ -45,8 +45,8 @@ class DetailPendaftaranScreen extends StatelessWidget {
                           child: Image.network(
                             '${data['foto']}',
                             width:
-                                40, // harus sama dengan diameter CircleAvatar
-                            height: 40,
+                                150, // harus sama dengan diameter CircleAvatar
+                            height: 150,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -101,7 +101,17 @@ class DetailPendaftaranScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         // LOGIC TERIMA
-                        controller.simpanAccMahasiswa(data['mid']);
+                        Get.defaultDialog(
+                          title: "Konfirmasi",
+                          middleText:
+                              "Apakah Anda yakin ingin menerima mahasiswa ini?",
+                          textCancel: "Batal",
+                          textConfirm: "Ya, Terima",
+                          onConfirm: () {
+                            Get.back();
+                            controller.simpanAccMahasiswa(data['mid']);
+                          },
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
@@ -121,7 +131,17 @@ class DetailPendaftaranScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         // LOGIC TOLAK
-                        controller.simpanNonAccMahasiswa(data['mid']);
+                        Get.defaultDialog(
+                          title: "Konfirmasi",
+                          middleText:
+                              "Apakah Anda yakin ingin menolak mahasiswa ini?",
+                          textCancel: "Batal",
+                          textConfirm: "Ya, Tolak",
+                          onConfirm: () {
+                            Get.back();
+                            controller.simpanNonAccMahasiswa(data['mid']);
+                          },
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,

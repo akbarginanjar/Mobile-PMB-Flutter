@@ -239,7 +239,7 @@ class PendaftaranController extends GetxController {
     try {
       EasyLoading.show();
       MahasiswaService()
-          .accMahasiswa(mid, {})
+          .nonAccMahasiswa(mid, {})
           .then(
             (value) async => {
               print(value.body),

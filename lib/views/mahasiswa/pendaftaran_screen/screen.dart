@@ -42,28 +42,32 @@ class FormPendaftaranScreen extends StatelessWidget {
                   children: [
                     // FOTO PROFIL
                     Center(
-                      child: CircleAvatar(
-                        radius: 26,
-                        backgroundColor: Colors.blue.shade100,
-                        child:
-                            controller.dataPendaftar[0]['upload_file'] == null
-                            ? Text(
-                                controller.dataPendaftar[0]["nama_lengkap"]
-                                    .substring(0, 1),
-                                style: const TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
+                      child: SizedBox(
+                        height: 180,
+                        width: 180,
+                        child: CircleAvatar(
+                          radius: 26,
+                          backgroundColor: Colors.blue.shade100,
+                          child:
+                              controller.dataPendaftar[0]['upload_file'] == null
+                              ? Text(
+                                  controller.dataPendaftar[0]["nama_lengkap"]
+                                      .substring(0, 1),
+                                  style: const TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              : ClipOval(
+                                  child: Image.network(
+                                    '${controller.dataPendaftar[0]['upload_file']}',
+                                    width:
+                                        150, // harus sama dengan diameter CircleAvatar
+                                    height: 150,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                              )
-                            : ClipOval(
-                                child: Image.network(
-                                  '${controller.dataPendaftar[0]['upload_file']}',
-                                  width:
-                                      40, // harus sama dengan diameter CircleAvatar
-                                  height: 40,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                        ),
                       ),
                     ),
 
