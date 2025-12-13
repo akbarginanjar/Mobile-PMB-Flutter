@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pmb_mobile/controllers/pendaftaran_controller.dart';
 import 'package:pmb_mobile/utils/theme.dart';
+import 'package:pmb_mobile/views/mahasiswa/pendaftaran_screen/edit_pendaftaran.dart';
 
 class FormPendaftaranScreen extends StatelessWidget {
   final controller = Get.put(PendaftaranController());
@@ -36,7 +37,7 @@ class FormPendaftaranScreen extends StatelessWidget {
           if (controller.errorMessagePendaftaran.isNotEmpty) {
             return Text(controller.errorMessagePendaftaran.value);
           }
-          return controller.dataPendaftar.isNotEmpty
+          return controller.dataPendaftar[0]['mid'] != null
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -52,7 +53,7 @@ class FormPendaftaranScreen extends StatelessWidget {
                               controller.dataPendaftar[0]['upload_file'] == null
                               ? Text(
                                   controller.dataPendaftar[0]["nama_lengkap"]
-                                      .substring(0, 1),
+                                      .substring(),
                                   style: const TextStyle(
                                     fontSize: 22,
                                     fontWeight: FontWeight.bold,
@@ -122,6 +123,73 @@ class FormPendaftaranScreen extends StatelessWidget {
                           : controller.dataPendaftar[0]['status'] == 1
                           ? Colors.green[800]
                           : Colors.red[800],
+                    ),
+                    SizedBox(height: 10),
+                    if (controller.dataPendaftar[0]['keterangan'] != null)
+                      SizedBox(
+                        width: double.infinity,
+                        child: Card(
+                          margin: EdgeInsets.all(0),
+                          color: Colors.blue[50],
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 15,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Keterangan dari admin :'),
+                                SizedBox(height: 5),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: Card(
+                                    elevation: 0,
+                                    color: Colors.white,
+                                    margin: EdgeInsets.all(0),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10),
+                                      child: Text(
+                                        '${controller.dataPendaftar[0]['keterangan']}',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    SizedBox(height: 10),
+                    OutlinedButton(
+                      onPressed: () {
+                        controller.fileName.value =
+                            controller.dataPendaftar[0]["upload_file"];
+                        controller.namaC.value.text = controller
+                            .dataPendaftar[0]["nama_lengkap"]
+                            .toString();
+                        controller.tglLahirC.value.text = controller
+                            .dataPendaftar[0]["tanggal_lahir"]
+                            .toString();
+                        controller.alamatC.value.text = controller
+                            .dataPendaftar[0]["alamat"]
+                            .toString();
+                        controller.telpC.value.text = controller
+                            .dataPendaftar[0]["no_telp"]
+                            .toString();
+                        controller.semesterC.value.text = controller
+                            .dataPendaftar[0]["semester_masuk"]
+                            .toString();
+                        controller.selectedMpid.value = controller
+                            .dataPendaftar[0]["mpid"]
+                            .toString();
+                        Get.to(
+                          EditFormPendaftaranScreen(
+                            mid: controller.dataPendaftar[0]['mid'].toString(),
+                          ),
+                        );
+                      },
+                      child: Text('Edit Pendaftaran Saya'),
                     ),
                   ],
                 )

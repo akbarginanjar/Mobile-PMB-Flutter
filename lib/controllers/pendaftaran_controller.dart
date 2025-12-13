@@ -210,11 +210,56 @@ class PendaftaranController extends GetxController {
     }
   }
 
+  Future<void> editPendfataran(mid) async {
+    print(namaC.value.text);
+    print(tglLahirC.value.text);
+    print(alamatC.value.text);
+    print(telpC.value.text);
+    print(selectedMpid);
+    print(pidC.value.text);
+    print(GetStorage().read('pid'));
+    EasyLoading.show(status: 'Mohon tunggu...');
+    final url = Uri.parse("${Base.url}/api/mahasiswa-pendaftaran");
+
+    var request = http.MultipartRequest("POST", url);
+
+    request.fields['nama_lengkap'] = namaC.value.text;
+    request.fields['tanggal_lahir'] = tglLahirC.value.text;
+    request.fields['alamat'] = alamatC.value.text;
+    request.fields['no_telp'] = telpC.value.text;
+    request.fields['mpid'] = selectedMpid.value;
+    request.fields['semester_masuk'] = semesterC.value.text;
+    request.fields['pid'] = GetStorage().read('pid').toString();
+    request.fields['mid'] = mid;
+
+    // HANDLE FILE UNTUK WEB + MOBILE
+    if (fileBytes.value != null && fileName.value != null) {
+      request.files.add(
+        http.MultipartFile.fromBytes(
+          'upload_file',
+          fileBytes.value!,
+          filename: basename(fileName.value!),
+        ),
+      );
+    }
+
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      EasyLoading.showSuccess('Formulir anda berhasil terkirim');
+      Get.off(DaftarBerhasil());
+    } else {
+      Get.snackbar("Error", "Gagal mendaftar");
+    }
+  }
+
+  Rx<TextEditingController> keterangan = TextEditingController().obs;
+
   void simpanAccMahasiswa(mid) {
     try {
       EasyLoading.show();
       MahasiswaService()
-          .accMahasiswa(mid, {})
+          .accMahasiswa(mid, FormData({'keterangan': keterangan.value.text}))
           .then(
             (value) async => {
               print(value.body),
@@ -237,12 +282,12 @@ class PendaftaranController extends GetxController {
 
   void simpanNonAccMahasiswa(mid) {
     try {
+      // print(keterangan.value.text.toString());
       EasyLoading.show();
       MahasiswaService()
-          .nonAccMahasiswa(mid, {})
+          .nonAccMahasiswa(mid, FormData({'keterangan': keterangan.value.text}))
           .then(
             (value) async => {
-              print(value.body),
               if (value.statusCode == 200)
                 {
                   Get.back(result: true),
@@ -252,7 +297,9 @@ class PendaftaranController extends GetxController {
                 {EasyLoading.showError('${value.body['message']}')},
             },
           );
+      EasyLoading.dismiss();
     } catch (e) {
+      EasyLoading.dismiss();
       Get.snackbar(
         'Fitur Maitanace !!',
         'Fitur ini sedang dalam masa perbaikan.',

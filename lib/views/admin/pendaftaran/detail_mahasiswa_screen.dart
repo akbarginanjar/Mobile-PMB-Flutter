@@ -107,6 +107,20 @@ class DetailPendaftaranScreen extends StatelessWidget {
                               "Apakah Anda yakin ingin menerima mahasiswa ini?",
                           textCancel: "Batal",
                           textConfirm: "Ya, Terima",
+                          content: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextFormField(
+                                maxLines: 3,
+                                decoration: InputDecoration(
+                                  labelText: "Keterangan",
+                                  hintText: 'keterangan...',
+                                  border: OutlineInputBorder(),
+                                ),
+                                controller: controller.keterangan.value,
+                              ),
+                            ],
+                          ),
                           onConfirm: () {
                             Get.back();
                             controller.simpanAccMahasiswa(data['mid']);
@@ -136,6 +150,20 @@ class DetailPendaftaranScreen extends StatelessWidget {
                           middleText:
                               "Apakah Anda yakin ingin menolak mahasiswa ini?",
                           textCancel: "Batal",
+                          content: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextFormField(
+                                maxLines: 3,
+                                decoration: InputDecoration(
+                                  labelText: "Keterangan",
+                                  hintText: 'keterangan...',
+                                  border: OutlineInputBorder(),
+                                ),
+                                controller: controller.keterangan.value,
+                              ),
+                            ],
+                          ),
                           textConfirm: "Ya, Tolak",
                           onConfirm: () {
                             Get.back();

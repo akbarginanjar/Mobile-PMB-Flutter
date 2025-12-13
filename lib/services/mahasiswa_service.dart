@@ -7,11 +7,11 @@ class MahasiswaService extends GetConnect implements GetxService {
   }
 
   Future<Response> accMahasiswa(id, body) {
-    return put('${Base.url}/api/mahasiswa/acc/$id', body);
+    return post('${Base.url}/api/mahasiswa/acc/$id', body);
   }
 
   Future<Response> nonAccMahasiswa(id, body) {
-    return put('${Base.url}/api/mahasiswa/non-acc/$id', body);
+    return post('${Base.url}/api/mahasiswa/non-acc/$id', body);
   }
 
   Future<Response> listMahasiswa(params) {
