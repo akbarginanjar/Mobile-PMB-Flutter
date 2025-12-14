@@ -97,7 +97,7 @@ class AuthController extends GetxController {
                   ),
                   GetStorage().write('email', value.body['data']['email']),
                   Get.offAll(MainScreenMahasiswa()),
-                  EasyLoading.showSuccess('Login Berhasil'),
+                  EasyLoading.showSuccess('Registrasi Berhasil'),
                 }
               else
                 {EasyLoading.showError('${value.body['message']}')},

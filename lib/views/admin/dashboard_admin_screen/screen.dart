@@ -33,7 +33,7 @@ class DashboardAdminScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: const [
                         Text(
-                          "Sealamat Datang",
+                          "Selamat Datang",
                           style: TextStyle(fontSize: 14, color: Colors.grey),
                         ),
                         SizedBox(height: 2),
