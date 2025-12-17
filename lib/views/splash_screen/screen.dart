@@ -16,9 +16,7 @@ class SplashScreen extends StatelessWidget {
           return Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Center(
-                child: Image.asset('assets/images/logo_bsi.png', scale: 1.3),
-              ),
+              Center(child: Image.asset('assets/images/logo.png', scale: 1.3)),
               Column(
                 children: [
                   Text(

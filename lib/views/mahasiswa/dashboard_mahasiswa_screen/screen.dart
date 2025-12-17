@@ -98,7 +98,7 @@ class DashboardMahasiswaScreen extends StatelessWidget {
               CarouselSlider(
                 items:
                     [
-                      'assets/images/banner1.jpeg',
+                      'assets/images/banner2.jpeg',
                       'assets/images/banner2.jpeg',
                     ].map((path) {
                       return ClipRRect(

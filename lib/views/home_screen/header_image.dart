@@ -15,7 +15,7 @@ class HeaderImage extends StatelessWidget {
                 bottomRight: Radius.circular(28),
               ),
               child: Image.asset(
-                "assets/images/header.jpeg",
+                "assets/images/header.jpg",
                 height: 240,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -51,7 +51,7 @@ class HeaderImage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Universitas Bina Sarana Informatika",
+                    "Universitas Budi Pekerti",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -60,7 +60,7 @@ class HeaderImage extends StatelessWidget {
                   ),
                   Text(
                     "Penerimaan Mahasiswa Baru",
-                    style: TextStyle(color: Colors.white, fontSize: 17),
+                    style: TextStyle(color: Colors.white, fontSize: 15),
                   ),
                 ],
               ),
